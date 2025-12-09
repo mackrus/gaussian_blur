@@ -6,8 +6,6 @@ img = Image.open("photos/nice_dog.jpg").convert("L")
 
 # B är bildmatrisen
 B = np.asarray(img)
-# print(f"Shape of B: {B.shape}")
-# print(B)
 
 # p är en sklaningsfaktor till kärnan
 p = 10
