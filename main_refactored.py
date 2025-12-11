@@ -100,7 +100,7 @@ def main():
             B_output_clipped = np.clip(B_output, 0, 255).astype(np.uint8)
             output_img = Image.fromarray(B_output_clipped)
 
-            # Save the result
+            # Spara resultatet
             output_filename = f"output/output_{k_type}_p{p}.png"
             output_img.save(output_filename)
             print(f"  -> sparat till {output_filename}")
