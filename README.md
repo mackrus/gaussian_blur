@@ -19,7 +19,7 @@ This project demonstrates image processing techniques using Fast Fourier Transfo
 
 1.  **Clone the repository:**
     ```bash
-    git clone <mackrus/gaussian_blur>
+    git clone "https://github.com/mackrus/gaussian_blur.git"
     cd gaussian_blur
     ```
 
