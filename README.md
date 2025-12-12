@@ -31,36 +31,21 @@ This project demonstrates image processing techniques using Fast Fourier Transfo
 
 ## Usage
 
-### 1. Refactored Script (Recommended)
 
-The refactored script (`main_refactored.py`) allows you to loop over multiple kernel sizes and types automatically.
+The script (`main.py`) allows you to loop over multiple kernel sizes and types automatically.
 
 **Run the script:**
-```bash
-uv run main_refactored.py
-```
-
-**What it does:**
-1.  Loads `photos/nice_dog.JPG`.
-2.  Iterates through kernel sizes $p = [10, 20, 50]$.
-3.  Iterates through kernel types: `box`, `gaussian`, `linear`.
-4.  Applies the convolution using FFT.
-5.  Saves the output images as `output_<type>_p<size>.png` in the project root.
-
-### 2. Original Script
-
-The original script (`main.py`) performs a single convolution with a fixed box kernel.
-
 ```bash
 uv run main.py
 ```
 
-## Project Structure
+**What it does:**
+1.  Loads `photos/nice_dog.JPG`.
+2.  Iterates through kernel sizes $p \in [1, 20]$.
+3.  Iterates through kernel types: `box`, `gaussian`.
+4.  Applies the convolution using FFT.
+5.  Saves the output images as `output_<type>_p<size>.png` in the project root.
 
-- `main_refactored.py`: Main entry point with functions for kernel generation and batch processing.
-- `main.py`: Original script (single execution).
-- `photos/`: Directory containing input images.
-- `pyproject.toml`: Dependency configuration.
 
 ## Theory
 
