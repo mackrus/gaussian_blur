@@ -1,6 +1,6 @@
 # Gaussian Blur & FFT Convolution
 
-This project demonstrates image processing techniques using Fast Fourier Transforms (FFT) in Python. It implements 2D convolution to apply various blur kernels (Box, Gaussian, Linear) to images.
+This project demonstrates image processing techniques using Fast Fourier Transforms (FFT) in Python. It implements 2D convolution to apply various blur kernels (Box, Gaussian) to images.
 
 ## Features
 
