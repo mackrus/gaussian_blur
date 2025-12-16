@@ -4,7 +4,7 @@ This project demonstrates image processing techniques using Fast Fourier Transfo
 
 ## Features
 
-- **FFT-based Convolution:** Efficiently computes convolution using the Convolution Theorem ($f * g \iff \mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))$).
+- **FFT-based Convolution:** Efficiently computes convolution using the Convolution Theorem $f * g \iff \mathcal{F}^{-1}(\mathcal{F}(f) \cdot \mathcal{F}(g))$ 
 - **Multiple Kernels:**
   - **Box (Mean):** Standard averaging blur.
   - **Gaussian:** Smooth, bell-curve blur based on sigma.
