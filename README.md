@@ -8,7 +8,7 @@ This project demonstrates image processing techniques using Fast Fourier Transfo
 - **Multiple Kernels:**
   - **Box (Mean):** Standard averaging blur.
   - **Gaussian:** Smooth, bell-curve blur based on sigma.
-- **Batch Processing:** `main_refactored.py` automatically iterates over different kernel sizes and types.
+- **Batch Processing:** `main.py` automatically iterates over different kernel sizes and types.
 
 ## Prerequisites
 
