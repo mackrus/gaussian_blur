@@ -13,8 +13,8 @@ def get_kernel(size, kernel_type="box", sigma=None):
 
     Args:
         size (int): The size of the kernel (size x size).
-        kernel_type (str): "box", "gaussian", or "linear".
-        sigma (float): Sigma for gaussian kernel. Defaults to size/6 if None.
+        kernel_type (str): "box" or "gaussian".
+        sigma (float): Sigma for gaussian kernel. Defaults to size/4 if None.
 
     Returns:
         np.ndarray: The normalized kernel matrix.
@@ -26,11 +26,11 @@ def get_kernel(size, kernel_type="box", sigma=None):
         if sigma is None:
             sigma = size / 4.0  # godtycklig std
 
-        # Skapa ett rutnät av värden som är linjärt fördelade mellan -1 till 1
+        # Skapa ett rutnät av värden i intevallet [-a/2, a/2] för a = (p-1)
         ax = np.linspace(-(size - 1) / 2.0, (size - 1) / 2.0, size)
         xx, yy = np.meshgrid(ax, ax)
 
-        # Gör värdena normalfördelade
+        # Gör värdena i rutnätet normalfördelade
         kernel = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
         return kernel / np.sum(kernel)
 
@@ -73,13 +73,13 @@ def apply_convolution(img_array, kernel):
 
 
 def main():
-    image_path = "photos/nice_dog.JPG"
+    image_path = "photos/nice_dog.jpg"
     img = load_image(image_path)
 
     # B är bildmatrisen
     B = np.asarray(img)
 
-    # p-värden är olika linjära omskalningar av initalvärdena i kärnan (enhetsmatris)
+    # p-värdet är en skalningsfaktor för kärnan
     p_values = [i for i in range(1, 20)]
     kernel_types = ["box", "gaussian"]
 
@@ -89,7 +89,7 @@ def main():
         for p in p_values:
             print(f"Applicerar {k_type}-konvolution med p={p}...")
 
-            # gör en kärna
+            # skapa en kärna av storlek p x p
             kernel = get_kernel(p, kernel_type=k_type)
 
             # kör konvolutionsfunktionen
@@ -100,7 +100,7 @@ def main():
             B_output_clipped = np.clip(B_output, 0, 255).astype(np.uint8)
             output_img = Image.fromarray(B_output_clipped)
 
-            # Save the result
+            # Spara resultatet
             output_filename = f"output/output_{k_type}_p{p}.png"
             output_img.save(output_filename)
             print(f"  -> sparat till {output_filename}")
