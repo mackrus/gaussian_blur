@@ -24,13 +24,13 @@ def get_kernel(size, kernel_type="box", sigma=None):
 
     elif kernel_type == "gaussian":
         if sigma is None:
-            sigma = size / 4.0  # godtycklig std
+            sigma = size / 4.0  # Arbitrary standard deviation
 
-        # Skapa ett rutnät av värden i intevallet [-a/2, a/2] för a = (p-1)
+        # Create a grid of values centered around 0
         ax = np.linspace(-(size - 1) / 2.0, (size - 1) / 2.0, size)
         xx, yy = np.meshgrid(ax, ax)
 
-        # Gör värdena i rutnätet normalfördelade
+        # Apply Gaussian distribution to the grid values
         kernel = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
         return kernel / np.sum(kernel)
 
@@ -46,14 +46,14 @@ def apply_convolution(img_array, kernel):
     rows, cols = img_array.shape
     max_dim = max(rows, cols)
 
-    # 1. Anpassa padding till den största sidan av bilden
+    # 1. Pad the image to match the largest dimension
     pad_rows_img = max_dim - rows
     pad_cols_img = max_dim - cols
     img_padded = np.pad(
         img_array, ((0, pad_rows_img), (0, pad_cols_img)), "constant", constant_values=0
     )
 
-    # 2. Fixa padding för kerneln, så att dimensionerna matchar
+    # 2. Pad the kernel to match the image dimensions
     k_rows, k_cols = kernel.shape
     pad_rows_k = max_dim - k_rows
     pad_cols_k = max_dim - k_cols
@@ -61,11 +61,11 @@ def apply_convolution(img_array, kernel):
         kernel, ((0, pad_rows_k), (0, pad_cols_k)), "constant", constant_values=0
     )
 
-    # 3. FFT
+    # 3. Compute FFT
     img_f = np.fft.fft2(img_padded)
     k_f = np.fft.fft2(kernel_padded)
 
-    # 4. Multiplicera och applicera FFT-invers
+    # 4. Multiply in frequency domain and compute inverse FFT
     output_f = img_f * k_f
     output = np.real(np.fft.ifft2(output_f))
 
@@ -73,39 +73,45 @@ def apply_convolution(img_array, kernel):
 
 
 def main():
-    image_path = "photos/nice_dog.jpg"
-    img = load_image(image_path)
+    # Note: Ensure the image path is correct relative to the script execution
+    # Changed extension to .JPG based on file listing, assuming case sensitivity on some systems
+    image_path = "photos/nice_dog.JPG"
+    
+    try:
+        img = load_image(image_path)
+    except FileNotFoundError:
+        print(f"Error: Could not find image at {image_path}")
+        return
 
-    # B är bildmatrisen
-    B = np.asarray(img)
+    # Convert image to numpy array
+    image_matrix = np.asarray(img)
 
-    # p-värdet är en skalningsfaktor för kärnan
+    # Define kernel sizes (p)
     p_values = [i for i in range(1, 20)]
     kernel_types = ["box", "gaussian"]
 
-    print(f"Bild: {image_path} (Storlek: {B.shape})")
+    print(f"Image: {image_path} (Size: {image_matrix.shape})")
 
     for k_type in kernel_types:
         for p in p_values:
-            print(f"Applicerar {k_type}-konvolution med p={p}...")
+            print(f"Applying {k_type} convolution with p={p}...")
 
-            # skapa en kärna av storlek p x p
+            # Generate a kernel of size p x p
             kernel = get_kernel(p, kernel_type=k_type)
 
-            # kör konvolutionsfunktionen
-            B_output = apply_convolution(B, kernel)
+            # Apply convolution
+            output_matrix = apply_convolution(image_matrix, kernel)
 
-            # clipping gör att värdena håller sig i intervallet [0,255]
-            # konvertera tillbaka till bild
-            B_output_clipped = np.clip(B_output, 0, 255).astype(np.uint8)
-            output_img = Image.fromarray(B_output_clipped)
+            # Clip values to [0, 255] and convert to image
+            output_matrix_clipped = np.clip(output_matrix, 0, 255).astype(np.uint8)
+            output_img = Image.fromarray(output_matrix_clipped)
 
-            # Spara resultatet
+            # Save the result
             output_filename = f"output/output_{k_type}_p{p}.png"
             output_img.save(output_filename)
-            print(f"  -> sparat till {output_filename}")
+            print(f"  -> Saved to {output_filename}")
 
-    print("Klart.")
+    print("Done.")
 
 
 if __name__ == "__main__":
